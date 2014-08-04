@@ -174,11 +174,10 @@ send_message(ConnId, MsgId, DeviceToken, Alert, Badge, Sound, Expiry, ExtraArgs)
                                  device_token = DeviceToken}).
 
 %% @doc  Generates an "unique" and valid message Id
--spec message_id() -> binary().
+-spec message_id() -> <<_:32>>.
 message_id() ->
-  {_, _, MicroSecs} = erlang:now(),
-  Secs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-  First = Secs rem 65536,
+  {MS, S, MicroSecs} = erlang:now(),
+  First = (MS*1000*1000 + S) rem 65536,
   Last = MicroSecs rem 65536,
   <<First:2/unsigned-integer-unit:8, Last:2/unsigned-integer-unit:8>>.
 
