@@ -291,7 +291,7 @@ send_payload(Socket, MsgId, Expiry, BinToken, Payload) ->
                 BinPayload/binary>>],
     ssl:send(Socket, Packet).
 
-hexstr_to_bin(S) ->
+hexstr_to_bin(S) when length(S) == 64 ->
   hexstr_to_bin(S, []).
 hexstr_to_bin([], Acc) ->
   list_to_binary(lists:reverse(Acc));
