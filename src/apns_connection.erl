@@ -291,15 +291,13 @@ send_payload(Socket, MsgId, Expiry, BinToken, Payload) ->
                 BinPayload/binary>>],
     ssl:send(Socket, Packet).
 
-hexstr_to_bin(S) when length(S) == 64 ->
-  hexstr_to_bin(S, []).
-hexstr_to_bin([], Acc) ->
-  list_to_binary(lists:reverse(Acc));
-hexstr_to_bin([$ |T], Acc) ->
-    hexstr_to_bin(T, Acc);
-hexstr_to_bin([X,Y|T], Acc) ->
-  {ok, [V], []} = io_lib:fread("~16u", [X,Y]),
-  hexstr_to_bin(T, [V | Acc]).
+hexstr_to_bin(S) when size(S) == 64 ->
+   hex2bin(S).
+
+hex2bin(Hex) ->
+   << <<(h2b(I)):8/integer>> || <<I:2/binary>> <= Hex >>.
+h2b(I) ->
+   erlang:binary_to_integer(I, 16).
 
 bin_to_hexstr(Binary) ->
     L = size(Binary),
