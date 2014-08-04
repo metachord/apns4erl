@@ -114,7 +114,7 @@ open_feedback(Connection) ->
   end.
 
 %% @hidden
--spec handle_call(X, reference(), state()) -> {stop, {unknown_request, X}, {unknown_request, X}, state()}.
+-spec handle_call(X, {pid(),reference()}, state()) -> {stop, {unknown_request, X}, {unknown_request, X}, state()}.
 handle_call(Request, _From, State) ->
   {stop, {unknown_request, Request}, {unknown_request, Request}, State}.
 
@@ -229,6 +229,7 @@ code_change(_OldVsn, State, _Extra) ->  {ok, State}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-spec build_payload(#apns_msg{}) -> iodata().
 build_payload(#apns_msg{alert = Alert,
                         badge = Badge,
                         sound = Sound,
